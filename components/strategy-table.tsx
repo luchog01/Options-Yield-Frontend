@@ -148,6 +148,12 @@ export function StrategyTable({ initialData, onRefresh }: StrategyTableProps) {
                 <ArrowUpDown className="ml-2 h-4 w-4" />
               </Button>
             </TableHead>
+            <TableHead>
+              <Button variant="ghost" onClick={() => sortData("ticker")} className="font-bold text-lg">
+                Ticker {getSortIndicator("ticker")}
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+              </Button>
+            </TableHead>
             <TableHead className="font-bold text-lg">Assets</TableHead>
             <TableHead>
               <Button variant="ghost" onClick={() => sortData("breakeven_price")} className="font-bold text-lg">
@@ -169,6 +175,7 @@ export function StrategyTable({ initialData, onRefresh }: StrategyTableProps) {
               <TableCell className="text-base">{formatPercentage(result.high_underlying_payoff_percentage)}</TableCell>
               <TableCell className="text-base">{getStrategyInitials(result.type)}</TableCell>
               <TableCell className="text-base">{formatCurrency(result.strike)}</TableCell>
+              <TableCell className="text-base">{result.ticker}</TableCell>
               <TableCell className="text-base">
                 <div className="flex flex-col gap-1">
                   {result.assets.map((asset, assetIndex) => (
@@ -182,7 +189,7 @@ export function StrategyTable({ initialData, onRefresh }: StrategyTableProps) {
           ))}
           {data.length === 0 && (
             <TableRow>
-              <TableCell colSpan={6} className="text-center py-16 text-xl text-muted-foreground">
+              <TableCell colSpan={7} className="text-center py-16 text-xl text-muted-foreground">
                 No data available yet. Send data to the API endpoint to populate the table.
               </TableCell>
             </TableRow>

@@ -16,6 +16,7 @@ export interface Asset {
 
 export interface StrategyResult {
   type: StrategyType
+  ticker: string
   initial_cost: number
   high_underlying_payoff_percentage: number
   breakeven_price: number
