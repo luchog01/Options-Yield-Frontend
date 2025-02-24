@@ -4,8 +4,10 @@ import { useState, useEffect } from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import type { StrategyResult, StrategyType, Asset } from "@/lib/types"
 import { strategyTypeShort } from "@/lib/types"
+import { playAlertSound } from "@/lib/sound"
 
 interface StrategyTableProps {
   initialData: StrategyResult[]
@@ -22,6 +24,7 @@ export function StrategyTable({ initialData, onRefresh }: StrategyTableProps) {
   const [data, setData] = useState(initialData)
   const [sortConfig, setSortConfig] = useState<SortConfig>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [payoffThreshold, setPayoffThreshold] = useState(0.07) // 7% default threshold
 
   const applySort = (items: StrategyResult[]) => {
     if (sortConfig.length === 0) return items
@@ -40,7 +43,20 @@ export function StrategyTable({ initialData, onRefresh }: StrategyTableProps) {
       try {
         setIsLoading(true)
         const newData = await onRefresh()
-        setData(applySort(newData))
+        const sortedData = applySort(newData)
+        
+        // Check for high-payoff no-risk strategies
+        const highPayoffNoRisk = sortedData.find(
+          strategy => 
+            strategy.type === "NO_RISK_STRATEGY" && 
+            strategy.high_underlying_payoff_percentage > payoffThreshold
+        )
+        
+        if (highPayoffNoRisk) {
+          playAlertSound()
+        }
+        
+        setData(sortedData)
       } catch (error) {
         console.error('Failed to refresh data:', error)
       } finally {
@@ -56,7 +72,7 @@ export function StrategyTable({ initialData, onRefresh }: StrategyTableProps) {
 
     // Cleanup on unmount
     return () => clearInterval(intervalId)
-  }, [onRefresh, sortConfig])
+  }, [onRefresh, sortConfig, payoffThreshold])
 
   // Apply sort whenever sortConfig changes
   useEffect(() => {
@@ -118,11 +134,29 @@ export function StrategyTable({ initialData, onRefresh }: StrategyTableProps) {
 
   return (
     <div className="rounded-md border relative">
-      {isLoading && (
-        <div className="absolute top-2 right-2 text-sm text-muted-foreground">
-          Refreshing...
+      <div className="p-4 border-b flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <label htmlFor="threshold" className="text-sm font-medium">
+            Alert Threshold:
+          </label>
+          <Input
+            id="threshold"
+            type="number"
+            min="0"
+            max="100"
+            step="0.1"
+            value={(payoffThreshold * 100).toFixed(1)}
+            onChange={(e) => setPayoffThreshold(Number(e.target.value) / 100)}
+            className="w-24"
+          />
+          <span className="text-sm text-muted-foreground">%</span>
         </div>
-      )}
+        {isLoading && (
+          <div className="text-sm text-muted-foreground">
+            Refreshing...
+          </div>
+        )}
+      </div>
       <Table>
         <TableHeader>
           <TableRow>
