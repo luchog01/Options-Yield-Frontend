@@ -160,45 +160,59 @@ export function StrategyTable({ initialData, onRefresh }: StrategyTableProps) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>
+            <TableHead className="text-center p-0">
               <Button
                 variant="ghost"
                 onClick={() => sortData("high_underlying_payoff_percentage")}
-                className="font-bold text-lg"
+                className="font-bold text-lg h-full w-full flex items-center justify-center m-0 px-2"
               >
-                Payoff % {getSortIndicator("high_underlying_payoff_percentage")}
-                <ArrowUpDown className="ml-2 h-4 w-4" />
+                <span className="inline-flex items-center gap-2">
+                  Payoff % {getSortIndicator("high_underlying_payoff_percentage")}
+                  <ArrowUpDown className="h-4 w-4" />
+                </span>
               </Button>
             </TableHead>
-            <TableHead>
-              <Button variant="ghost" onClick={() => sortData("type")} className="font-bold text-lg">
-                Strategy {getSortIndicator("type")}
-                <ArrowUpDown className="ml-2 h-4 w-4" />
+            <TableHead className="text-center p-0">
+              <Button variant="ghost" onClick={() => sortData("type")} className="font-bold text-lg h-full w-full flex items-center justify-center m-0 px-2">
+                <span className="inline-flex items-center gap-2">
+                  Strategy {getSortIndicator("type")}
+                  <ArrowUpDown className="h-4 w-4" />
+                </span>
               </Button>
             </TableHead>
-            <TableHead>
-              <Button variant="ghost" onClick={() => sortData("strike")} className="font-bold text-lg">
-                Strike {getSortIndicator("strike")}
-                <ArrowUpDown className="ml-2 h-4 w-4" />
+            <TableHead className="text-center p-0">
+              <Button variant="ghost" onClick={() => sortData("strike")} className="font-bold text-lg h-full w-full flex items-center justify-center m-0 px-2">
+                <span className="inline-flex items-center gap-2">
+                  Strike {getSortIndicator("strike")}
+                  <ArrowUpDown className="h-4 w-4" />
+                </span>
               </Button>
             </TableHead>
-            <TableHead>
-              <Button variant="ghost" onClick={() => sortData("ticker")} className="font-bold text-lg">
-                Ticker {getSortIndicator("ticker")}
-                <ArrowUpDown className="ml-2 h-4 w-4" />
+            <TableHead className="text-center p-0">
+              <Button variant="ghost" onClick={() => sortData("ticker")} className="font-bold text-lg h-full w-full flex items-center justify-center m-0 px-2">
+                <span className="inline-flex items-center gap-2">
+                  Ticker {getSortIndicator("ticker")}
+                  <ArrowUpDown className="h-4 w-4" />
+                </span>
               </Button>
             </TableHead>
-            <TableHead className="font-bold text-lg">Assets</TableHead>
-            <TableHead>
-              <Button variant="ghost" onClick={() => sortData("breakeven_price")} className="font-bold text-lg">
-                Breakeven {getSortIndicator("breakeven_price")}
-                <ArrowUpDown className="ml-2 h-4 w-4" />
+            <TableHead className="text-center p-4">
+              <span className="font-bold text-lg">Assets</span>
+            </TableHead>
+            <TableHead className="text-center p-0">
+              <Button variant="ghost" onClick={() => sortData("breakeven_price")} className="font-bold text-lg h-full w-full flex items-center justify-center m-0 px-2">
+                <span className="inline-flex items-center gap-2">
+                  Breakeven {getSortIndicator("breakeven_price")}
+                  <ArrowUpDown className="h-4 w-4" />
+                </span>
               </Button>
             </TableHead>
-            <TableHead>
-              <Button variant="ghost" onClick={() => sortData("initial_cost")} className="font-bold text-lg">
-                Initial Cost {getSortIndicator("initial_cost")}
-                <ArrowUpDown className="ml-2 h-4 w-4" />
+            <TableHead className="text-center p-0">
+              <Button variant="ghost" onClick={() => sortData("initial_cost")} className="font-bold text-lg h-full w-full flex items-center justify-center m-0 px-2">
+                <span className="inline-flex items-center gap-2">
+                  Initial Cost {getSortIndicator("initial_cost")}
+                  <ArrowUpDown className="h-4 w-4" />
+                </span>
               </Button>
             </TableHead>
           </TableRow>
@@ -206,19 +220,19 @@ export function StrategyTable({ initialData, onRefresh }: StrategyTableProps) {
         <TableBody>
           {data.map((result, index) => (
             <TableRow key={index}>
-              <TableCell className="text-base">{formatPercentage(result.high_underlying_payoff_percentage)}</TableCell>
-              <TableCell className="text-base">{getStrategyInitials(result.type)}</TableCell>
-              <TableCell className="text-base">{formatCurrency(result.strike)}</TableCell>
-              <TableCell className="text-base">{result.ticker}</TableCell>
+              <TableCell className="text-base text-center">{formatPercentage(result.high_underlying_payoff_percentage)}</TableCell>
+              <TableCell className="text-base text-center">{getStrategyInitials(result.type)}</TableCell>
+              <TableCell className="text-base text-center">{formatCurrency(result.strike)}</TableCell>
+              <TableCell className="text-base text-center">{result.ticker}</TableCell>
               <TableCell className="text-base">
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1 items-center">
                   {result.assets.map((asset, assetIndex) => (
                     <div key={assetIndex}>{formatAsset(asset)}</div>
                   ))}
                 </div>
               </TableCell>
-              <TableCell className="text-base">{formatCurrency(result.breakeven_price)}</TableCell>
-              <TableCell className="text-base">{formatCurrency(result.initial_cost)}</TableCell>
+              <TableCell className="text-base text-center">{formatCurrency(result.breakeven_price)}</TableCell>
+              <TableCell className="text-base text-center">{formatCurrency(result.initial_cost)}</TableCell>
             </TableRow>
           ))}
           {data.length === 0 && (
